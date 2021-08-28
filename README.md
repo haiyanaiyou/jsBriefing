@@ -1,2 +1,3 @@
 # jsBriefing
-Javascript语言精粹 simple
+Javascript深入理解 
+前端进阶
