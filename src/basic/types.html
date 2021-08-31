@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>javascript 类型</title>
+</head>
+<body>
+  
+</body>
+<script>
+  /*
+   *  Number 
+   *  采用IEEE 754标准  64位双精度浮点数
+   * 
+  */
+ var a = 0.1;
+ var b= 0.2;
+
+ const memory = new Float64Array(1);
+ memory[0] = a;
+ console.log(memory);
+ const intArr = new Uint8Array(memory.buffer)
+ console.log(intArr)
+/* 十进制表示 
+    小数点前后均可省略
+    表示： 开头数 + e + 位数
+    尽量不要使用 0 开头
+*/
+</script>
+</html>

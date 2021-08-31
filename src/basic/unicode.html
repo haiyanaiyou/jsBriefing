@@ -10,8 +10,26 @@
   
 </body>
 <script>
+  // 静态 String.fromCharCode() 方法返回由指定的 UTF-16 代码单元序列创建的字符串。
   for(let i=0;i<128;i++){
-    document.write(`<span> ${String.fromCharCode(i)} </span>`)
+    document.write(`<span style="background:yellow;margin-left:60px;"> ${String.fromCharCode(i)} ,${i}</span><br/>`)
   }
+
+  /*
+  * 中文字符变量名转义使用\u + unicode编码点值
+  *  codePointAt() 方法返回 一个 Unicode 编码点值的非负整数
+  */
+ let firstCode = '厉害'.codePointAt(0).toString();
+ console.log('\\u' + firstCode)
+
+ /*
+  * whiteSpace 空格表示符
+    tab键               \t                  unicode表示值是9
+    <VT>  纵向制表符  字符串表示是'\v'    
+    <FF>  FORM FEED   
+    <SP>
+    <NBSP> &nbsp;  no-break space    
+    <ZWNBSP> zero width  no-break space 
+ */
 </script>
 </html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>表达式</title>
+</head>
+<body>
+  
+</body>
+<script>
+  /*
+    表达式运算优先级
+    member(访问属性) > new > call(函数调用) > 位运算符 > 逻辑运算符
+  */
+ class Parent{
+   constructor() {
+     this.name = 'Parent'
+   }
+ }
+
+ class Child extends Parent{
+   constructor() {
+     super();
+     console.log(this.name)
+   }
+ }
+console.log(new Child)
+
+var a =1,b=1,c=1;
+a
+++
+b
+++
+c
+console.log(a,b,c)
+
+for(var i = 0; i<10;i++) {
+  const btn = document.createElement('button');
+  btn.innerHTML = i;
+  void (function(j) {
+    btn.onclick = function() {
+      alert(j)
+    }
+  })(i)
+  document.body.appendChild(btn);
+}
+
+/*
+  拆箱基本操作顺序：
+  1、如果有toPrimitive ，就调用toPrimitive；
+  2、如果没有就调用默认的toPrimitive， 默认toPrimitive包含valueOf 和 toString；
+*/
+
+// string 转换为 number 实现
+function coverStringToNumber() {
+  
+}
+</script>
+</html>
