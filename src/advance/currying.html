@@ -1,0 +1,18 @@
+<script>
+  /*
+    函数柯里化
+    柯里化是一种将使用多个参数的一个函数转换成一系列使用一个参数的函数的技术。
+  */
+ var currying = function(fn) {
+   const args = [].slice.call(arguments,1)
+   return function() {
+    const newArgs = args.concat([].slice.call(arguments))
+    return fn.apply(this, newArgs)
+   }
+ }
+ function add(a,b) {
+  return a+b
+ }
+let curry = currying(add)
+console.log(curry(3)(1))
+</script>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>js执行过程</title>
+</head>
+<body>
+  <div id="div">onclick</div>
+</body>
+<script>
+  /*
+    浏览器在加载html页面的时候，首先会提供一个供全局js代码执行的环境,也就是全局作用域（global/window）
+    基本类型存储值
+    引用类型存储地址：
+       对象会存在一个地址里，修改属性值时，首先会通过地址找到对应的空间，然后把空间里的对应属性名的属性值进行修改；
+       函数会开辟一个地址，把函数体当做字符串存储起来，代表当前函数的整体
+  */
+ var num = 12
+ var obj = {
+   name: 'test',
+   age: 36
+ }
+ function fn() {
+   console.log(11)
+ }
+ console.log(fn) //输出函数整体
+ console.log(fn()) //输出函数执行后的结果，如果没有return 默认是undefined
+
+ /*
+    预解析（声明declare 与 定义 defined）只发生在当前作用域下，只有函数执行的时候才会对函数体内的进行预解析
+    在当前作用域，js代码执行之前，浏览器首先会默认地把带有var变量和函数进行提前声明或者定义
+
+    声明：提前告诉浏览器有这么一个变量存在
+    定义：给变量进行赋值
+
+    var 在预解析时， 只是提前声明
+    function 在预解析时 提前声明和定义均完成
+
+ */
+
+/*
+  js存储方式：
+  栈：用来提供一个供js代码执行的环境（作用域，包括全局作用域和局部作用域），预解析发生在栈内存
+  堆：存储的是引用类型的值
+      对象存储的是属性名和属性值
+      函数存储的是代码字符串
+
+*/  
+
+var user = {
+  name: 'John'
+}
+Object.defineProperty(user, 'name', {
+  writable: false,
+  value: 'John'
+})
+delete user.name;
+user.name = 'hi'
+console.log(user)
+
+/*
+  1、如何区分私有变量和全局变量？
+    在全局作用域下声明（预解析时）的变量就是全局变量；
+    在私有作用域中声明的变量和函数的形参都是私有的变量；
+
+    在私有作用域中，代码执行过程中如果遇到一个变量，首先要确定这个变量是不是私有变量，如果是，则和外部作用域无任何关系；
+    如果不是私有的，则往当前作用域的上级作用域查找，如果上级也没有，则继续查找，一直找到window为止（作用域链）
+
+  2、当函数执行时（直接目的：让函数体中的代码执行），首先会形成一个新的私有作用域，然后进行如下操作：
+      1）如果有形参，先给形参赋值
+      2）进行私有作用域中的预解析
+      3）私有作用域中的代码从上到下执行
+    函数形成一个新的私有的作用域保护了里面的私有变量不受外界的干扰（外面改变不了里面私有的，私有的也改变不了外面的）--》闭包
+    闭包只是一种机制
+*/
+
+/*
+  预解析的特殊情况：
+  1、不管判断条件是否成立，都会把var进行提前声明；
+  2、预解析的时候只解析"="左边的；
+  3、函数体中return 下面的代码，虽然不执行了但仍需要进行预解析，而return跟着的都是返回的值，所以不进行预解析
+  4、在预解析时，如果名称已经声明过了，不需要重新声明，但需要重新的赋值
+*/ 
+
+if(!('count' in window)){
+  var count = 12
+}
+console.log(count) //undefined
+
+func() //Uncaught TypeError: func is not a function
+var func = function(){
+  console.log(1)
+}
+
+/*
+  自执行函数：定义和执行一起完成，所以在全局作用域下不进行预解析
+*/ 
+void function (a) {
+  console.log(a)
+}(11)
+
+/*
+  js中如果变量名和函数名重复，也算冲突
+  在预解析时，如果名称已经声明过了，不需要重新声明，但需要重新的赋值
+*/ 
+fn1() //2
+function fn1() {console.log(1)}
+fn1() //2
+var fn1 = 10
+fn1() //TypeError: fn1 is not a function
+function fn1() {console.log(2)}
+fn1()
+
+/*
+  如何查找当前作用域的上一级作用域？
+  当前函数在哪个作用域下定义的，它的上级作用域就是哪个,与在哪里执行的无关
+*/ 
+var scope = 12
+function scopeFn() {
+  var scope = 120
+  return function() {
+    console.log(scope)
+  }
+}   
+var f = scopeFn()
+f();
+void function() {
+  var scope = 1200
+  f()
+}()
+
+/*
+  js内存释放
+  
+  堆内存：
+    数据类型为对象或者函数时，在定义的时候首先都会开辟一个堆内存，堆内存有一个引用的地址，如果外面有其他变量用到了这个地址，则这个内存就被占用了，此时不能销毁
+  如何释放/销毁堆内存？
+    只需要把所有引用它的变量值赋值为null即可，
+    如果当前的堆内存没有被任何东西占用，浏览器就会在空闲的时候把它销毁
+  js垃圾回收机制？
+
+  栈内存：
+    全局作用域：只有当页面关闭时，才会销毁
+    私有作用域：
+      一般情况下，函数执行会形成一个新的私有作用域，当私有作用域中的代码执行完成后，当前作用域都会主动的进行释放和销毁
+      也有特殊情况，当前的私有作用域中的部分内存被作用域以外的东西占用，则当前作用域就销毁不了了
+        特殊情况大致如下：
+        1、函数执行返回了一个引用数据类型的值，并且在函数的外面被一个其他的东西给接收了。这种情况下形成的私有作用域一般不会被销毁；
+        2、在一个私有作用域中给DOM元素的事件绑定方法，一般情况下 私有作用域不能销毁；
+        3、（不立即销毁情况） fn2返回的函数没有被其他东西占用，但是还需要再执行一次，所以暂时不销毁，当返回的值执行完成后，浏览器会在空闲的时候把它销毁
+*/ 
+var oDiv = document.getElementById('div')
+void function() {
+  oDiv.onclick = function() {
+    alert('div')
+  }
+}() //当前自执行函数形成的这个私有作用域也不销毁
+
+function fn2() {
+  var num = 10
+  return function() {
+    console.log(num)
+  }
+}
+fn2()() //首先执行fn2，返回小函数对应的内存地址，然后执行返回的小函数
+</script>
+</html>
