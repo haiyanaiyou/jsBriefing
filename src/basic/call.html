@@ -1,0 +1,21 @@
+<script>
+  void function() {
+    function myCall(context) {
+      context = context || window;
+      let args = [...arguments].slice(1);
+      context.fn = this;
+      result = context.fn(...args);
+      delete context.fn;
+      return result;
+    }
+    Function.prototype.call = myCall
+  }();
+
+  let obj = {
+    name: 'obj'
+  }
+  function getName() {
+    console.log(this.name)
+  }
+  getName.call(obj,20)
+</script>

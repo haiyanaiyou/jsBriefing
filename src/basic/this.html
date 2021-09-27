@@ -1,0 +1,31 @@
+<script>
+  /*
+    js中的this代表的是当前行为执行的主体
+    js中的context代表的是当前行为执行的环境（区域）
+  */ 
+
+/*
+  this指向问题：
+  1、函数执行 首先看函数名前面是否有".",有的话"."前面是谁this就是谁，没有的话this就是window；
+  2、自执行函数中的this 永远是window；
+  3、给元素的某一个事件绑定方法，当事件触发时，执行对应的方法，方法中的this是当前的元素；
+*/  
+var num = 20
+var obj = {
+  num: 30,
+  fn: (function(){
+    this.num *=3
+    num +=15
+    var num = 45
+    return function(){
+      this.num *=4
+      num +=20
+      console.log(num)
+    }
+  })(num)
+}
+var fn = obj.fn
+fn()  //65
+obj.fn() //85
+console.log(window.num, obj.num) //240 120
+</script>

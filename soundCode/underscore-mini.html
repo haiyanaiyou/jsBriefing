@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="exports">exports</div>
+</body>
+<script src="./mini-underscore.js"></script>
+<script>
+// (function () {
+//   // var root = this;
+//   /*
+//     判断当前环境来绑定this  严格模式下this为undefined
+//     1、浏览器环境中提供window全局对象 this默认指向window
+//     2、node中的全局对象是global this默认指向空对象
+//     3、web worker（Web Worker 处在一个自包含的执行环境中，无法访问 Window 对象和 Document 对象，和主线程之间的通信也只能通过异步消息传递机制来实现。）
+//       所以是无法访问window对象的，所以结果会是false，但是能通过 self 访问到 Worker 环境中的全局对象
+//       在浏览器中，除了 window 属性，我们也可以通过 self 属性直接访问到 Winow 对象，可以把window直接替换成self
+//     4、node的vm模块（沙盒模块）中，runInContext方法中，是不存在window，也不存在global变量的，但是可以通过this访问到全局对象
+//     5、在微信小程序中，window 和 global 都是 undefined，加上又强制使用严格模式，this 为 undefined，挂载就会发生错误
+
+//   */ 
+//   // var root = (typeof window === 'object' && window.window === window && window) || 
+//   //            (typeof global === 'object' && global.global === global && global);
+//   var root = (typeof self === 'object' && self.self === self && self) || 
+//              (typeof global === 'object' && global.global === global && global) ||
+//              this ||
+//              {};
+
+//   /*
+//     underscore支持两种调用方式：
+//       1、函数式风格
+//         _.reverse('123')
+//       2、面向对象风格
+//         _('123').reverse()
+//   */ 
+//   // var _ = {};
+//   var ArrayProto = Array.prototype;
+//   var push = ArrayProto.push;
+
+//   var _ = function(obj) {
+//     if(obj instanceof _) return obj;
+//     if(!(this instanceof _)) return new _(obj);
+
+console.log(_.log('123'));
+console.log(_('obj').log());
+</script>
+</html>

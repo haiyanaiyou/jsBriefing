@@ -1,0 +1,371 @@
+<script>
+  // 正则表达式 用来处理字符串的规则
+  let str = 'good good study , day day up! ';
+  let reg = /\d+/;
+  console.log(reg.test(str));
+
+  let str1 = '2019-01-02'
+  console.log(reg.exec(str1)); // ["2019",index: 0,inputs: '2019-01-02',groups: undefined]
+  
+  // 编写正则表达式
+  void(function() {
+    /*
+      创建方式：
+      1、字面量方式（两个斜杠之间包起来的 都是用来描述规则的元字符，不识别变量值）
+      2、构造函数模式创建（new RegExp(元字符字符串，修饰符字符串)，值得注意的是，参数是字符串，需要转义字符,x写两个斜杠，可以识别变量值）
+
+    */ 
+   let type = 'hi'
+   let reg = /^@"+type+"@$/
+   let regF = new RegExp("^@"+type+"@$")
+
+    /*
+        正则表达式：
+        两部分组成：
+        1、元字符
+          常用元字符：
+          1）量词元字符（设置出现的次数）
+            *      代表0到多次
+            +      代表1到多次（至少1次）
+            ?      代表0次或者1次
+            {n}    代表出现n次（n为0到正整数）
+            {n,}   代表出现n到多次
+            {n,m}  代表出现n到m次，包含n和m 
+
+          2）特殊元字符（单个或者组合在一起代表特殊的含义）
+            \      代表转义字符
+            .      代表除\n（换行符）以外的任意字符
+            ^      代表以哪一个元字符作为开始
+            $      代表以哪个元字符作为结束
+            \n     代表换行符
+            \d     代表0~9之间的一个数字
+            \D     代表非0~9之间的一个数字
+            \w     代表数字、字母、下划线中的任意一个字符
+            \s     代表空白字符串（包含空格、制表符、换页符等）
+            \t     代表一个制表符（一个tab键，也就是四个空格）
+            x|y    代表x或者y中的一个字符
+            [xyz]  代表x或者y或者z中的一个字符
+            [^xy]  代表除了x或者y以外的任意字符
+            [a-z]  代表指定a到z这个范围内的任意字符（[0-9a-zA-Z_] 相当于就是 \w）
+            [^a-z] 代表[a-z]的取反，除了a-z以外的任意字符
+            ()     代表正则中的分组符号
+            (?:)   只匹配不捕获
+            (?=)   正向预查
+            (?!)   负向预查
+          
+          3）普通元字符（代表本身含义的）
+            /hy/   代表此正则匹配的就是'hy'
+
+        2、修饰符
+            i      代表忽略单词大小写匹配
+            m      可以进行多行匹配
+            g      可以进行全局匹配
+    */ 
+
+    /*
+      元字符详细解析
+      ^ $   控制首尾 精准匹配
+
+    */ 
+   let reg1 = /^2.3$/; //匹配 以2开头 3结尾 中间连接除\n之外的任意字符（.代表的是除换行符\n之外的任意字符）
+   console.log(reg1.test('2.3')); //true
+   console.log(reg1.test('2$3')); //true
+   console.log(reg1.test('23')); //false
+   console.log(reg1.test('2\n3')); //false
+
+   let reg2 = /^2\.3$/;
+   console.log(reg2.test('2.3')); //true
+   console.log(reg2.test('2@3')); //false
+
+  /*
+    x|y 会存在很乱的优先级问题
+        解决办法：一般会使用分组元字符（），改变处理的优先级
+  */ 
+  let reg3 = /^18|29$/;
+  console.log(reg3.test('829')); //true
+  console.log(reg3.test('1829')); //true
+  console.log(reg3.test('129')); //true
+  console.log(reg3.test('89')); //false
+  
+  console.log('==========reg4======================')
+  let reg4 = /^(18|29)$/;
+  console.log(reg4.test('18')); //true
+  console.log(reg4.test('29')); //true
+  console.log(reg4.test('189')); //false
+
+  console.log('==========reg5======================')
+
+  // 中括号中出现的字符一般都代表本身的含义
+  // 中括号中不存在多位数
+  let reg5 = /^[@+]+$/; //至少会存在一个+或者@符号的字符串
+  console.log(reg5.test('++'));
+  console.log(reg5.test('@+'));
+  console.log(reg5.test('++@'));
+  console.log(reg5.test('+'));
+
+  let reg6 = /^[12]$/; //匹配的是1或者2
+  let reg7 = /^[10-29]$/; //匹配的是 1或者0-2或者9
+
+  console.log('================================================================')
+  console.log(reg6.test('12')); //false
+  console.log(reg6.test('2')); //true
+
+  console.log('================================================================')
+  console.log(reg7.test('29')); //false
+  console.log(reg7.test('1')); //true
+
+
+  })();
+  console.log('常用的正则表达式')
+
+  // 常用的正则表达式
+  void(function() {
+    /*
+      验证是否为有效数字
+      1、有+ -，也可能没有；
+      2、可以是一位数(\d) 也可以是多位数([1-9]\d+)，多位数首位不能是0；
+      3、可以是小数((\.)?)，小数的话要满足小数点+数字(\.\d+)；
+
+    */ 
+    let validNumberReg = /^[+-]?(\d|([1-9]\d+))(\.\d+)?$/;
+    console.log(validNumberReg.test('123.uuu')); //false
+    console.log(validNumberReg.test('-03')); //false
+    console.log(validNumberReg.test('9.0')); //true
+
+    /*
+      验证密码
+      1、数字、字母、下划线组成
+      2、6到16位组成
+    */
+   console.log('验证密码') 
+   let passwordReg = /^\w{6,16}$/;
+   console.log(passwordReg.test('111122asd')); //true
+   console.log(passwordReg.test('11好')); //false
+
+  /*
+    验证真实姓名
+    1、汉字组成([\u4E00-\u9FA5])
+    2、长度在2到10位
+    3、可能有译名(点最多出现两次) 汉字•汉字
+  */  
+  console.log('验证真实姓名')
+  let nameReg = /^[\u4E00-\u9FA5]{2,10}(•[\u4E00-\u9FA5]{2,10}){0,2}$/;
+  console.log(nameReg.test('hai'));
+  console.log(nameReg.test('真实'));
+  console.log(nameReg.test('美呀•漂亮'));
+
+  /*
+    验证邮箱
+    1、邮箱的名字由 数字、字母、下划线、-、. 几部分组成，但是 -或者.不能连续出现也不能作为开始；
+    （格式可为 111.222.333  或者 aaa-yyyy-uuu 或者 ddd-uu.999）
+      1)开头是数字 字母 下划线 至少一位（^\w+）;
+      2)-数字 字母 下划线 或者 . 数字 字母 下划线，出现0到多次
+    2、@ 连接
+    3、后续紧跟 数字 字母，至少一位([0-9a-zA-Z]+)
+    4、对@后面名字的补充，比如多域名邮箱、企业邮箱((\.|-)[0-9a-zA-Z]+)*
+    5、匹配最后的域名.com/.cn/...（\.[0-9a-zA-Z]+）
+
+  */ 
+  console.log('验证邮箱')
+  let emailReg = /^\w+((-\w+)|(\.\w+))*@[0-9a-zA-Z]+((\.|-)[0-9a-zA-Z]+)*\.[0-9a-zA-Z]+$/
+  console.log(emailReg.test('123@qq.com')) // true
+
+  /*
+    验证身份证号
+    1、一共18位；
+    2、最后一位可能是X；
+    3、身份证前六位是省市县，后8位是年月日，后2位是经过算法算出来的，倒数第二位是 偶数是女 奇数是男，最后一位是X或者数字
+
+  */ 
+  console.log('验证身份证号')
+  let avalidReg = /^(\d{6})(\d{4})(\d{2})(\d{2})\d{2}(\d)(\d|X)$/;
+  console.log(avalidReg.exec('340622199806128889'))
+  })()
+
+  console.log('======正则的捕获======')
+
+  ~(function (){
+    /*
+      实现正则捕获的方法
+      - 正则RegExp.prototype 上的方法：
+        exec
+        test（本意是匹配）
+          RegExp.$1 ~ RegExp.$9 获取的是当前本次正则匹配后，第一个到第九个分组的信息
+      -字符串String.prototype上支持正则表达式处理的方法：
+        replace
+          字符串中实现替换，一般都是伴随正则使用。
+        match
+        split
+        ...
+      -
+      
+      如何实现正则捕获(正则捕获的前提是 当前正则要和字符串匹配，如果不匹配 捕获的结果是null)
+        -基于exec实现正则的捕获：
+          1、捕获到的结果是null 或者一个数组；
+             第一项是 本次捕获到的内容
+             其余项是对应小分组本次单独捕获的内容
+             index：当前捕获的内容在字符串中的起始索引
+             input: 原始字符串
+          2、每执行一次exec，只能捕获到一个符合正则规则的，但是默认情况下，我们执行n次，获取的结果永远都是第一次匹配到的，其余的捕获不到
+             也就是正则捕获的懒惰性（默认只捕获第一个）
+             懒惰性捕获的原因：默认情况下lastIndex（reg.lastIndex 是指当前正则下一次匹配的起始索引位置）的值不会被修改，每一次都是从字符串开始位置查找，所以找到的永远都是第一个匹配上的
+             解决方式：
+              1）使用修饰符 g ，可更改lastIndex 值,当捕获到最后一次，再次捕获的时候，捕获的结果是null，lastIndex又回归到了初始值0，开始了再一次的捕获；
+        
+        -基于字符串match实现正则的捕获：
+          字符串中的match 方法，可以在执行一次的情况下捕获到所有匹配的数据，前提也得是使用了全局修饰符
+
+
+    */ 
+   let str = '2018iiiii9990yytette556t'
+   let reg = /\d+/g;
+  //  console.log(reg.exec(str))
+  //  console.log(reg.lastIndex)
+  //  console.log(reg.exec(str))
+  
+    // execAll 其实也是match的实现机制
+    function execAll(str="") {
+      // 第一步需要验证是否使用了全局修饰符g，这是前提条件，否则会造成死循环
+      // 可使用this.global来判断 ，为true则使用了全局修饰符
+      if(!this.global) return this.exec(str);
+      let arr = [];
+      let result = this.exec(str);
+      while(result){
+        arr.push(result[0]);
+        result = this.exec(str);
+      }
+      return arr.length === 0 ? null : arr;
+    }
+    RegExp.prototype.execAll = execAll;
+
+    console.log(reg.execAll(str))
+    console.log(str.match(reg))
+  })();
+
+  console.log('=============分组捕获和分组引用===================')
+  ~(function(){
+    /*
+      正则的分组捕获一次的情况(不需要捕获的地方 可以使用 ?: 只匹配不捕获)
+      匹配结果：
+        第一项是大正则匹配的结果；
+        其余项是每一个小分组单独匹配捕获的结果；
+
+    */ 
+   let str = '2021080919940219X';
+   let reg = /^(\d{4})(\d{2})(\d{2})(\d{4})(\d{2})(\d{2})(?:\d|X)$/;
+   console.log(reg.exec(str));
+   console.log(str.match(reg));
+
+  /*
+    不设置全局修饰符g时，只匹配一次， exec 和 match获取的结果一致（既有大正则匹配的信息，也有小分组匹配的信息）
+    多次匹配时，match只能获取大正则匹配的结果，无法获取到小正则匹配到的结果
+  */  
+   const str1 = '{1998}年{09}月{19}日'
+   const reg1= /\{(\d+)\}/g 
+  //  console.log(reg1.exec(str1));
+  //  let res  = reg1.exec(str1);
+  //  let [big, small] = res;
+  //  console.log(big, small);
+  //  console.log(reg1.exec(str1));
+   console.log('======')
+  //  console.log(str1.match(reg1))
+
+  // 分组捕获的实现
+  function getAll(str = '') {
+    let bigArr = []; 
+    let smallArr = []; 
+    let result = this.exec(str);
+    while(result) {
+      let [big, small] = result;
+      bigArr.push(big);
+      smallArr.push(small);
+      result = this.exec(str)
+    }
+    return {
+      bigArr,
+      smallArr
+    }
+  }
+  RegExp.prototype.getAll = getAll;
+
+  console.log(reg1.getAll(str1));
+
+  /*
+    分组引用 ， 就是通过 \数字 的形式 实现重复对应分组的内容
+
+  */ 
+  const str2 = 'look'; //寻找 book moon foot meet 之类的规则的单词
+  const reg2 = /^[a-zA-Z]([a-zA-Z])\1[a-zA-Z]$/;
+  console.log(reg2.test('foot')) // true
+  console.log(reg2.test('meet')) // true
+  console.log(reg2.test('foat')) // false
+
+  })();
+
+  console.log('===正则捕获的贪婪性===')        
+  ~(function() {
+    /*
+      正则捕获的贪婪性 （默认情况下，正则捕获的时候是按照当前正则所匹配的最长结果来获取的）
+      取消贪婪性： 在量词元字符后面设置？即可，会按照正则匹配最短结果来获取
+
+      问号？在正则中的作用汇总：
+      1、如果出现在问号左边是非量词元字符，就代表出现零到一次；
+      2、如果出现在问号左边是量词元字符，就表示是取消正则捕获的贪婪性；
+      3、(?:) 只匹配不捕获；
+      4、(?=) 正向预查；
+      5、(?!) 负向预查；
+    */ 
+   const str = '2019%5%6'
+   const reg1 = /\d+/g;
+   const reg2 = /\d+?/g;
+   console.log(str.match(reg1));
+   console.log(str.match(reg2));
+  })();   
+  
+  console.log('===综合案例=====')
+  ~(function() {
+    // 时间字符串转换成所需格式
+    let time = '2011-09-19'
+    const timeReg = /^(\d{4})-(\d{1,2})-(\d{1,2})$/;
+    // 方法一
+    // console.log(time.replace(timeReg, '$1年$2月$3日'))
+    // 方法二
+    time = time.replace(timeReg, (big, ...args)=>{
+      const [$1, $2, $3] = args
+      return `${$1}年${$2}月${$3}日`
+    })
+    console.log(time, 'time')
+
+    // 验证字符串中哪个字母出现的次数做多，次数是多少？
+    let str = 'abhhhsklkeduiuollipo';
+    str = str.split('').sort((a,b)=> a.localeCompare(b)).join('');
+    let reg = /([a-zA-Z])\1+/g;
+    let arr = str.match(reg).sort((a,b)=> b.length - a.length);
+    // 如果有出现的次数相同的字母，需要把相同的字母都列出来
+    let max = arr[0].length;
+    let res = [arr[0].substr(0,1)];
+    for(let i = 1; i<arr.length;i++){
+      let item = arr[i];
+      if(item.length < max){
+        break;
+      }
+      res.push(item.substr(0,1))
+    }
+    console.log(res,max)
+  })();
+
+  // 时间字符串格式化
+  let timeStr = '2021-09-20 16:20:20'
+  ~(function(){
+    function formatterTime(template='{0}年{1}月{2}日 {3}时{4}分{5}秒'){
+      let timeArr = this.match(/\d+/g);
+      template = template.replace(/\{(\d+)\}/g, (...[,$1])=>{
+        let time = timeArr[$1] || '00';
+        return time.length < 2 ? time = `0${time}`: time
+      })
+      return template;
+    }
+    String.prototype.formatterTime = formatterTime;
+  })()
+  console.log(timeStr.formatterTime('{0}/{1}/{2} {3}时{4}分{5}秒'))
+</script>

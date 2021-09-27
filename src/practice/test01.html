@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div class="box">
+    <h2>问题：描述</h2>
+    <button id="btn">
+      赞同 
+      <span id="spanNum">0</span>
+    </button>
+  </div>
+</body>
+<script>
+var oBtn = document.getElementById("btn");
+var spanNum = document.getElementById("spanNum");
+
+// oBtn.onclick = function(){
+//   // var count = 0
+//   // count++;
+//   // spanNum.innerHTML = count;  这个会导致每次都是1
+// }
+/*
+  解决方案：
+  1、count在全局中定义； 缺点：全局变量冲突
+*/ 
+// var count = 0
+// oBtn.onclick = function(){
+//   count++;
+//   spanNum.innerHTML = count; 
+// }
+
+// 2、使用自执行函数,形成一个不销毁的私有作用域，缺点：会占内存
+// void function() {
+//   var count = 0
+//   oBtn.onclick = function(){
+//     count++;
+//     spanNum.innerHTML = count; 
+//   }
+// }()
+// oBtn.onclick = (function(){
+//   var count = 0;
+//   return function(){
+//     count++;
+//     spanNum.innerHTML = count; 
+//   }
+// })()
+
+// 3、利用innerHTML方式处理，每次点击时先到页面获取最新的值，然后累加，最后把累加的结果重新放回去,
+// 缺点：每次都要先把页面中的内容转换为字符串然后再累加，累加后的结果要重新添加回去，重新添加回去的时候，浏览器都需要重新渲染
+// oBtn.onclick = function(){
+//   spanNum.innerHTML++;
+// }
+
+// 4、利用自定义属性存储(推荐)
+oBtn.count = 0
+oBtn.onclick = function(){
+  spanNum.innerHTML = ++this.count;
+}
+</script>
+</html>

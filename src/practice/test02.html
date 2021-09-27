@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>点击变色</title>
+</head>
+<body>
+  <button id="btn">点击变色</button>
+</body>
+<script>
+  const body = document.body
+  const btn = document.getElementById('btn');
+  const colors = ['red','yellow','blue','pink','black']
+  btn.count = 0
+  btn.onclick = function() {
+    body.style.backgroundColor = colors[btn.count]
+    btn.count >= colors.length-1 ? btn.count = 0 : btn.count++
+  }
+  
+  var name = '123'
+  var obj = {
+    name: 'hi'
+  }
+  console.log(obj.name)
+  console.log(obj['name'])
+  console.log(obj[name])
+</script>
+</html>

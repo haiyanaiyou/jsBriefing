@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>函数相关知识点</title>
+</head>
+<body>
+  
+</body>
+<script>
+  /*
+    arguments  函数内置的实参集合
+    1、属于类数组集合，集合中存储着所有函数执行时，传递的实参信息；
+    2、不论是否传递形参，arguments都存在；
+    3、不论是否传递实参，arguments都存在；
+  */ 
+
+/*
+  箭头函数中无arguments,可使用剩余运算符代替
+*/  
+// let sum = ()=>{
+//   console.log(arguments) //Uncaught ReferenceError: arguments is not defined
+// }
+// sum(1,2)
+
+/*
+  js中常用的函数方法
+  Math
+*/ 
+
+/*
+  Math数学函数
+  Math本身是一个对象，并不是一个函数，只不过对象中存储了很多操作数字的属性方法，因此被称为数学函数
+
+*/ 
+console.dir(Math)
+
+// Math.abs() 获取值的绝对值  会先基于Number() 转换为数字再处理
+Math.abs('-1px') //NaN
+
+// Math.ceil()  向上取整
+Math.ceil(12.6)  //13
+
+// Math.floor()  向下取整
+Math.floor(12.6) //12
+
+
+</script>
+</html>
