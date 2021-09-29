@@ -1,0 +1,15 @@
+<script>
+
+
+  function millimeter() {
+    // ?= 正向预查 查找的都是条件符合的
+    let reg = /\d{1,3}(?=(\d{3})+$)/g;
+    return this.replace(reg,(content)=> content + ',')
+  }
+
+   ['millimeter'].forEach(item =>{
+     String.prototype[item] = eval(item);
+   })
+  let num  = '123456890777'
+  console.log(num.millimeter())
+</script>
