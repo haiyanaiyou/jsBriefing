@@ -9,7 +9,7 @@
 <body>
   <div id="exports">exports</div>
 </body>
-<script src="./mini-underscore.js"></script>
+<script src="./js/mini-underscore.js"></script>
 <script>
 // (function () {
 //   // var root = this;
@@ -45,8 +45,12 @@
 //   var _ = function(obj) {
 //     if(obj instanceof _) return obj;
 //     if(!(this instanceof _)) return new _(obj);
-
-console.log(_.log('123'));
-console.log(_('obj').log());
+const obj = {
+  a: 1,
+  b: function() {}, 
+  c: []
+}
+console.log(_.isObject(obj));
+console.log(_.isFunction(obj.b));
 </script>
 </html>

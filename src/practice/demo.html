@@ -1,0 +1,30 @@
+<script>
+  /*
+    大小写取反
+  */ 
+~function() {
+  const letter = '123HYGbbhhhhsg';
+  function letterChange(str) {
+      return str.replace(/[a-zA-Z]/g, content =>{
+        console.log(content);
+        return content.toUpperCase() === content ? content.toLowerCase() : content.toUpperCase();
+      });
+  }
+  console.log(letterChange(letter));
+}();
+
+// indexOf 方法实现
+~function(){
+  function myIndexOf(str) {
+    const reg = new RegExp(str),
+          res = reg.exec(this);
+    console.log(res);
+    return res === null ? -1 : res.index;
+  }
+  String.prototype.myIndexOf = myIndexOf;
+}();
+let S = '12333444',
+    T = '34';
+console.log(S.myIndexOf(T));
+
+</script>

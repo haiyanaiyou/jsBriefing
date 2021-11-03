@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>图片延迟加载</title>
+  <style>
+    .imgBox{
+      width: 300px;
+      height: 300px;
+      border: 1px solid #333;
+      background: #ddd;
+      margin: 1000px auto;
+    }
+    img[src=""]{
+      display: none;
+    }
+    .imgBox img{
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+  <!-- 
+    图片延迟加载（懒加载）：
+    1、需要包裹在一个div中,目的在于 在图片不展示时可以占位，并能设置默认的背景图；
+    2、默认不设置img src路径，而是自定义一个属性进行存储图片的真实地址；
+    3、当浏览器窗口完全展示到图片位置时，再去加载真实图片，并且让其显示出来；
+   -->
+  <div class="imgBox">
+    <img src="" alt="" srcset="" trueImg="../images/img.jpg">
+  </div>
+</body>
+<script>
+  /*
+    判别条件（图片完全显示）：
+    a -》盒子底边距离页面最顶端的距离 ： 盒子高度 + 盒子距离body的上偏移；
+    b -》浏览器底边距离body的距离：一屏幕的高度 + 卷去的高度
+
+    a<=b 就代表着盒子就完全出现在用户的视野中
+
+  */ 
+ let imgBox = document.querySelector('.imgBox'),
+     _img = document.querySelector('img');
+
+// 监听页面滚动事件
+window.onscroll = function() {
+  // 先判别是否加载过，已经加载过的就不必再加载了
+  if(_img.isLoad) return;
+  console.log('reload')
+  let HTML = document.documentElement,
+      b = HTML.clientHeight + HTML.scrollTop,
+      a = imgBox.offsetHeight = imgBox.offsetTop;
+  if(a <= b) {
+    lazyImg(_img)
+  }
+
+}
+
+function lazyImg(curImg) {
+  let trueImg = curImg.getAttribute('trueImg');
+  curImg.src = trueImg;
+  // 校验图片是否能真实加载
+  curImg.onload = function() {
+    curImg.style.display = 'block';
+  }
+  curImg.isLoad = true;
+}
+</script>
+</html>
